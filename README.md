@@ -1,5 +1,9 @@
 # Yikes!
 
+### Run locally
+
+    go build . && docker compose build  && docker compose up
+
 ### Compile protobuf
 
     otel_proto_path=/path/to/opentelemetry-proto

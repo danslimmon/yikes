@@ -19,8 +19,17 @@ type traceServiceServer struct {
 //
 // It accepts trace spans as they come in from the client.
 func (s *traceServiceServer) Export(ctx context.Context, in *proto.ExportTraceServiceRequest) (*proto.ExportTraceServiceResponse, error) {
-    spans := in.GetResourceSpans()
-    fmt.Printf("spans: %v\n", spans)
+    for _, resourceSpans := range in.GetResourceSpans() {
+        for _, scopeSpans := range resourceSpans.GetScopeSpans() {
+            for _, span := range scopeSpans.GetSpans() {
+                fmt.Printf(
+                    "span: name=%s; duration=%dms\n",
+                    span.GetName(),
+                    (span.GetEndTimeUnixNano() - span.GetStartTimeUnixNano())/1000000,
+                )
+            }
+        }
+    }
     return new(proto.ExportTraceServiceResponse), nil
 }
 
